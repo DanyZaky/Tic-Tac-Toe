@@ -179,6 +179,9 @@ while True:
     board.choose_map()
 
     x_choice = int(input("X) Choose 1-9 > "))
+    while " " not in board.board1[x_choice-1] or "-" not in board.board2[x_choice-1] or "?" not in board.board3[x_choice-1]:
+        print("Wrong Step")
+        x_choice = int(input("X) Choose 1-9 > "))
 
     board.update_map_x()
 
@@ -243,11 +246,15 @@ while True:
                 break
 
     o_choice = int(input("O) Choose 1-9 > "))
+    while " " not in board.board1[o_choice-1] or "-" not in board.board2[o_choice-1] or "?" not in board.board3[o_choice-1]:
+        print("Wrong Step")
+        o_choice = int(input("o) Choose 1-9 > "))
 
     board.update_map_o()
 
     if p == "1":
         if play.check_winner_1("O"):
+            board.choose_map()
             print("O WIN!!!")
             a = input("Do you want to play again? Y/N > ")
             if a.lower() == "y":
@@ -258,6 +265,7 @@ while True:
                 break
     elif p == "2":
         if play.check_winner_2("O"):
+            board.choose_map()
             print("O WIN!!!")
             a = input("Do you want to play again? Y/N > ")
             if a.lower() == "y":
@@ -268,6 +276,7 @@ while True:
                 break
     elif p == "3":
         if play.check_winner_3("O"):
+            board.choose_map()
             print("O WIN!!!")
             a = input("Do you want to play again? Y/N > ")
             if a.lower() == "y":
@@ -276,8 +285,3 @@ while True:
             else:
                 print("Game Over")
                 break
-
-
-
-    
-
