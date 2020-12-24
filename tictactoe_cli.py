@@ -12,7 +12,7 @@ class Main_Menu():
     def welcome(self):
         print("----------WELCOME TO TIC-TAC-TOE CLI GAME----------")
         print(" ")
-        print("I HOPE YOU ENJOY THIS GAME")
+        print("----------I HOPE YOU WILL ENJOY THIS GAME----------")
         print(" ")
 
 class Play_Game(Main_Menu):
@@ -48,7 +48,7 @@ class Play_Game(Main_Menu):
                             board.choose_map()
 
                             if board.select_board == "1":
-                                if play.check_winner_1("X"):
+                                if play.check_winner("X"):
                                     print("X WIN!!!")
                                     a = input("Do you want to play again? Y/N > ")
                                     if a.lower() == "y":
@@ -61,7 +61,7 @@ class Play_Game(Main_Menu):
                                         print("Game Over")
                                         ext.exit_game()
                                         return False
-                                elif play.check_tie_1():
+                                elif play.check_tie():
                                     print("There is no winner!!!")
                                     a = input("Do you want to play again? Y/N > ")
                                     if a.lower() == "y":
@@ -75,7 +75,7 @@ class Play_Game(Main_Menu):
                                         ext.exit_game()
                                         return False
                             elif board.select_board == "2":
-                                if play.check_winner_2("X"):
+                                if play.check_winner("X"):
                                     print("X WIN!!!")
                                     a = input("Do you want to play again? Y/N > ")
                                     if a.lower() == "y":
@@ -88,7 +88,7 @@ class Play_Game(Main_Menu):
                                         print("Game Over")
                                         ext.exit_game()
                                         return False
-                                elif play.check_tie_2():
+                                elif play.check_tie():
                                     print("There is no winner!!!")
                                     a = input("Do you want to play again? Y/N > ")
                                     if a.lower() == "y":
@@ -102,7 +102,7 @@ class Play_Game(Main_Menu):
                                         ext.exit_game()
                                         return False
                             elif board.select_board == "3":
-                                if play.check_winner_3("X"):
+                                if play.check_winner("X"):
                                     print("X WIN!!!")
                                     a = input("Do you want to play again? Y/N > ")
                                     if a.lower() == "y":
@@ -115,7 +115,7 @@ class Play_Game(Main_Menu):
                                         print("Game Over")
                                         ext.exit_game()
                                         return False
-                                elif play.check_tie_3():
+                                elif play.check_tie():
                                     print("There is no winner!!!")
                                     a = input("Do you want to play again? Y/N > ")
                                     if a.lower() == "y":
@@ -134,7 +134,7 @@ class Play_Game(Main_Menu):
                             board.update_map_o()
 
                             if board.select_board == "1":
-                                if play.check_winner_1("O"):
+                                if play.check_winner("O"):
                                     board.choose_map()
                                     print("O WIN!!!")
                                     a = input("Do you want to play again? Y/N > ")
@@ -145,7 +145,7 @@ class Play_Game(Main_Menu):
                                         ext.exit_game()
                                         return False
                             elif board.select_board == "2":
-                                if play.check_winner_2("O"):
+                                if play.check_winner("O"):
                                     board.choose_map()
                                     print("O WIN!!!")
                                     a = input("Do you want to play again? Y/N > ")
@@ -156,7 +156,7 @@ class Play_Game(Main_Menu):
                                         ext.exit_game()
                                         return False
                             elif board.select_board == "3":
-                                if play.check_winner_3("O"):
+                                if play.check_winner("O"):
                                     board.choose_map()
                                     print("O WIN!!!")
                                     a = input("Do you want to play again? Y/N > ")
@@ -175,50 +175,18 @@ class Play_Game(Main_Menu):
         
         return False
 
-    def check_winner_1(self, player):
+    def check_winner(self, player):
         for i in [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]:
             result = True
             for number in i:
-                if board.board1[number] != player:
+                if board.board1[number] != player and board.board2[number] != player and board.board3[number] != player:
                     result = False
             if result == True:
                 return True
         return False
     
-    def check_winner_2(self, player):
-        for i in [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]:
-            result = True
-            for number in i:
-                if board.board2[number] != player:
-                    result = False
-            if result == True:
-                return True
-        return False
-    
-    def check_winner_3(self, player):
-        for i in [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]:
-            result = True
-            for number in i:
-                if board.board3[number] != player:
-                    result = False
-            if result == True:
-                return True
-        return False
-    
-    def check_tie_1(self):
-        if " " not in board.board1:
-            return True
-        else:
-            return False
-    
-    def check_tie_2(self):
-        if "-" not in board.board2:
-            return True
-        else:
-            return False
-    
-    def check_tie_3(self):
-        if "?" not in board.board3:
+    def check_tie(self):
+        if " " not in board.board1 or "-" not in board.board2 or "?" not in board.board3:
             return True
         else:
             return False
