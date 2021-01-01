@@ -1,3 +1,4 @@
+import os
 import random
 import sqlite3
 from datetime import datetime
@@ -77,6 +78,10 @@ class Data_Base():
         for row in rows:
             print(row)
 
+class Clear_Screen():
+    def clearScreen(self):
+        os.system('cls')
+
 class Main_Menu():
     game_still_going = True
     def __init__(self):
@@ -110,18 +115,23 @@ class Play_Game(Main_Menu):
         self.lose = "You Lose"
 
     def main(self):
+        clear.clearScreen()
         db.create_database()
         menu.welcome()
         while True:
             select = input("----------Main Menu---------- \n 1. Play Game \n 2. History \n 3. Exit Game \n > ")
+            clear.clearScreen()
             if select == "1":
                 menu.login()
+                clear.clearScreen()
                 while True:
                     main = input("----------Select Menu---------- \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                    clear.clearScreen()
                     while main:
                         if main == "1":
                             board.select_board = input("Choose Your Board \n 1. Board 1 ( ) \n 2. Board 2 ( - ) \n 3. Board 3 ( ? ) \n > ")
-                            
+                            clear.clearScreen()
+
                             if board.select_board == "1":
                                 print("You Choose")
                                 board.display1()
@@ -131,11 +141,13 @@ class Play_Game(Main_Menu):
                             elif board.select_board == "3":
                                 print("You Choose")
                                 board.display3()
-                                
+
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                            clear.clearScreen()
                         
                         elif main == "2":
                             character.select_character = input("Choose Your Character \n 1. X \n 2. O \n > ")
+                            clear.clearScreen()
                             
                             if character.select_character == "1":
                                 print("You are X")
@@ -143,9 +155,11 @@ class Play_Game(Main_Menu):
                                 print("You are O")
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                            clear.clearScreen()
                         
                         elif main == "3":
                             mode.select_mode = input("Choose Mode \n 1. Vs AI \n 2. Vs Player \n > ")
+                            clear.clearScreen()
                             
                             if mode.select_mode == "1":
                                 mode.vs_ai()
@@ -153,6 +167,7 @@ class Play_Game(Main_Menu):
                                 mode.vs_player()
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                            clear.clearScreen()
                         
                         elif main == "4":
                             while Main_Menu.game_still_going == True:
@@ -522,6 +537,7 @@ class Exit_Game(Main_Menu):
         print("----------THANK YOU FOR PLAYING THIS GAME----------")
 
 db = Data_Base()
+clear = Clear_Screen()
 menu = Main_Menu()
 play = Play_Game()
 board = Board()
