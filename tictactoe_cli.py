@@ -149,7 +149,7 @@ class Play_Game(Main_Menu):
                                 print("-----You Choose")
                                 board.display3()
 
-                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n 5. Back \n > ")
                             clear.clearScreen()
                     #select CHARACTER
                         elif main == "2":
@@ -161,7 +161,7 @@ class Play_Game(Main_Menu):
                             elif character.select_character == "2":
                                 print("-----You are O")
 
-                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n 5. Back \n > ")
                             clear.clearScreen()
                     #select MODE
                         elif main == "3":
@@ -173,7 +173,7 @@ class Play_Game(Main_Menu):
                             if mode.select_mode == "2":
                                 mode.vs_player()
 
-                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n 5. Back \n > ")
                             clear.clearScreen()
                     #G A M E P L A Y
                         elif main == "4":
