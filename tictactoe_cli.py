@@ -1,4 +1,81 @@
 import random
+import sqlite3
+from datetime import datetime
+
+class Data_Base():
+    def __init__(self):
+        self.connection = None
+        self.cursor = None
+        self.sql = None
+    
+    def create_database(self):
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+        self.sql = "CREATE TABLE IF NOT EXISTS data (ID INTEGER PRIMARY KEY AUTOINCREMENT, Username VARCHAR(50) NOT NULL, Your_Character VARCHAR(50) NOT NULL, Mode VARCHAR(50) NOT NULL, History VARCHAR(50) NOT NULL, DateTime VARCHAR(50) NOT NULL)"
+        self.cursor.execute(self.sql)
+    
+    def insert_win(self):
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+        date_time = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
+        self.sql = "INSERT INTO data (Username, Your_Character, Mode, History, DateTime) Values ('%s', '%s', '%s', '%s', '%s')"
+        
+        if character.select_character == "1" and mode.select_mode == "1":
+            self.sql = self.sql % (menu.username, character.character[0], mode.mode[0], play.win, date_time)
+        elif character.select_character == "1" and mode.select_mode == "2":
+            self.sql = self.sql % (menu.username, character.character[0], mode.mode[1], play.win, date_time)
+        elif character.select_character == "2" and mode.select_mode == "1":
+            self.sql = self.sql % (menu.username, character.character[1], mode.mode[0], play.win, date_time)
+        elif character.select_character == "2" and mode.select_mode == "2":
+            self.sql = self.sql % (menu.username, character.character[1], mode.mode[1], play.win, date_time)    
+        
+        self.cursor.execute(self.sql)
+        self.connection.commit()
+    
+    def insert_lose(self):
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+        date_time = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
+        self.sql = "INSERT INTO data (Username, Your_Character, Mode, History, DateTime) Values ('%s', '%s', '%s', '%s', '%s')"
+        
+        if character.select_character == "1" and mode.select_mode == "1":
+            self.sql = self.sql % (menu.username, character.character[0], mode.mode[0], play.lose, date_time)
+        elif character.select_character == "1" and mode.select_mode == "2":
+            self.sql = self.sql % (menu.username, character.character[0], mode.mode[1], play.lose, date_time)
+        elif character.select_character == "2" and mode.select_mode == "1":
+            self.sql = self.sql % (menu.username, character.character[1], mode.mode[0], play.lose, date_time)
+        elif character.select_character == "2" and mode.select_mode == "2":
+            self.sql = self.sql % (menu.username, character.character[1], mode.mode[1], play.lose, date_time)    
+        
+        self.cursor.execute(self.sql)
+        self.connection.commit()
+
+    def insert_tie(self):
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+        date_time = datetime.today().strftime("%d-%m-%Y %H:%M:%S")
+        self.sql = "INSERT INTO data (Username, Your_Character, Mode, History, DateTime) Values ('%s', '%s', '%s', '%s', '%s')"
+        
+        if character.select_character == "1" and mode.select_mode == "1":
+            self.sql = self.sql % (menu.username, character.character[0], mode.mode[0], play.tie, date_time)
+        elif character.select_character == "1" and mode.select_mode == "2":
+            self.sql = self.sql % (menu.username, character.character[0], mode.mode[1], play.tie, date_time)
+        elif character.select_character == "2" and mode.select_mode == "1":
+            self.sql = self.sql % (menu.username, character.character[1], mode.mode[0], play.tie, date_time)
+        elif character.select_character == "2" and mode.select_mode == "2":
+            self.sql = self.sql % (menu.username, character.character[1], mode.mode[1], play.tie, date_time)    
+        
+        self.cursor.execute(self.sql)
+        self.connection.commit()
+    
+    def check_history(self):
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+        self.sql = "SELECT * FROM data"
+        self.cursor.execute(self.sql)
+        rows = self.cursor.fetchall()
+        for row in rows:
+            print(row)
 
 class Main_Menu():
     game_still_going = True
@@ -8,170 +85,288 @@ class Main_Menu():
         self.select_map = True
         self.select_mode = True
         self.exit = True
+        self.username = None
 
     def welcome(self):
         print("----------WELCOME TO TIC-TAC-TOE CLI GAME----------")
         print(" ")
         print("----------I HOPE YOU WILL ENJOY THIS GAME----------")
         print(" ")
+    
+    def login(self):
+        print("Please input your username")
+        self.username = input("Username: ")
 
 class Play_Game(Main_Menu):
     def __init__(self):
         self.play = True
         self.x_choice = None
         self.o_choice = None
+        self.player_1_win = "Player 1 WIN!!!"
+        self.player_2_win = "Player 2 WIN!!!"
+        self.ai_win = "AI WIN!!!"
+        self.tie = "There is no winner!!!"
+        self.win = "You Win"
+        self.lose = "You Lose"
 
     def main(self):
+        db.create_database()
         menu.welcome()
-        select = input("Main Menu \n 1. Play Game \n 2. Exit Game \n > ")
-        if select == "1":
-            while True:
-                main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
-                while main:
-                    if main == "1":
-                        board.select_board = input("Choose Your Board \n 1. Board 1 ( ) \n 2. Board 2 ( - ) \n 3. Board 3 ( ? ) \n > ")
-                        main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
-                    elif main == "2":
-                        character.select_character = input("Choose Your Character \n 1. X \n 2. O \n > ")
-                        main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
-                    elif main == "3":
-                        mode.select_mode = input("Choose Mode \n 1. Vs AI \n 2. Vs Player \n > ")
-                        main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
-                    elif main == "4":
-                        while Main_Menu.game_still_going == True:
-                            board.choose_map()
-
-                            character.choose_chara_x() 
-
-                            board.update_map_x()
-
-                            board.choose_map()
-
+        while True:
+            select = input("----------Main Menu---------- \n 1. Play Game \n 2. History \n 3. Exit Game \n > ")
+            if select == "1":
+                menu.login()
+                while True:
+                    main = input("----------Select Menu---------- \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                    while main:
+                        if main == "1":
+                            board.select_board = input("Choose Your Board \n 1. Board 1 ( ) \n 2. Board 2 ( - ) \n 3. Board 3 ( ? ) \n > ")
+                            
                             if board.select_board == "1":
-                                if play.check_winner("X"):
-                                    print("X WIN!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_1()
-                                        board.choose_map()
-                                        character.choose_chara_x()   
-                                        board.update_map_x()
-                                        board.choose_map()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
-                                elif play.check_tie():
-                                    print("There is no winner!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_1()
-                                        board.choose_map()
-                                        character.choose_chara_x()   
-                                        board.update_map_x()
-                                        board.choose_map()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
+                                print("You Choose")
+                                board.display1()
                             elif board.select_board == "2":
-                                if play.check_winner("X"):
-                                    print("X WIN!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_2()
-                                        board.choose_map()
-                                        character.choose_chara_x()   
-                                        board.update_map_x()
-                                        board.choose_map()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
-                                elif play.check_tie():
-                                    print("There is no winner!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_2()
-                                        board.choose_map()
-                                        character.choose_chara_x()   
-                                        board.update_map_x()
-                                        board.choose_map()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
+                                print("You Choose")
+                                board.display2()
                             elif board.select_board == "3":
-                                if play.check_winner("X"):
-                                    print("X WIN!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_3()
-                                        board.choose_map()
-                                        character.choose_chara_x()   
-                                        board.update_map_x()
-                                        board.choose_map()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
-                                elif play.check_tie():
-                                    print("There is no winner!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_3()
-                                        board.choose_map()
-                                        character.choose_chara_x()   
-                                        board.update_map_x()
-                                        board.choose_map()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
+                                print("You Choose")
+                                board.display3()
+                                
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                        
+                        elif main == "2":
+                            character.select_character = input("Choose Your Character \n 1. X \n 2. O \n > ")
+                            
+                            if character.select_character == "1":
+                                print("You are X")
+                            elif character.select_character == "2":
+                                print("You are O")
 
-                            character.choose_chara_o()
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                        
+                        elif main == "3":
+                            mode.select_mode = input("Choose Mode \n 1. Vs AI \n 2. Vs Player \n > ")
+                            
+                            if mode.select_mode == "1":
+                                mode.vs_ai()
+                            if mode.select_mode == "2":
+                                mode.vs_player()
 
-                            board.update_map_o()
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                        
+                        elif main == "4":
+                            while Main_Menu.game_still_going == True:
+                                board.choose_map()
 
-                            if board.select_board == "1":
-                                if play.check_winner("O"):
-                                    board.choose_map()
-                                    print("O WIN!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_1()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
-                            elif board.select_board == "2":
-                                if play.check_winner("O"):
-                                    board.choose_map()
-                                    print("O WIN!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_2()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
-                            elif board.select_board == "3":
-                                if play.check_winner("O"):
-                                    board.choose_map()
-                                    print("O WIN!!!")
-                                    a = input("Do you want to play again? Y/N > ")
-                                    if a.lower() == "y":
-                                        board.board_reset_3()
-                                    else:
-                                        print("Game Over")
-                                        ext.exit_game()
-                                        return False
-                    else:
-                        print("Wrong Move")
-                        main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
-                    
-        else:
-            ext.exit_game()
+                                character.choose_chara_x() 
+
+                                board.update_map_x()
+
+                                board.choose_map()
+
+                                if board.select_board == "1":
+                                    if play.check_winner("X"):
+                                        if character.select_character == "1" and mode.select_mode == "1" or mode.select_mode == "2":
+                                            print(self.player_1_win)
+                                            db.insert_win()
+                                        elif character.select_character == "2" and mode.select_mode == "1":
+                                            print(self.ai_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "2" and mode.select_mode == "2":
+                                            print(self.player_2_win)
+                                            db.insert_lose()    
+                                        
+                                        a = input("Do you want to play again? Y/N > ")
+                                        
+                                        if a.lower() == "y":
+                                            board.board_reset_1()
+                                            board.choose_map()
+                                            character.choose_chara_x()   
+                                            board.update_map_x()
+                                            board.choose_map()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                    
+                                    elif play.check_tie():
+                                        print(self.tie)
+                                        db.insert_tie()
+                                        a = input("Do you want to play again? Y/N > ")
+                                        if a.lower() == "y":
+                                            board.board_reset_1()
+                                            board.choose_map()
+                                            character.choose_chara_x()   
+                                            board.update_map_x()
+                                            board.choose_map()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                
+                                elif board.select_board == "2":
+                                    if play.check_winner("X"):
+                                        if character.select_character == "1" and mode.select_mode == "1" or mode.select_mode == "2":
+                                            print(self.player_1_win)
+                                            db.insert_win()
+                                        elif character.select_character == "2" and mode.select_mode == "1":
+                                            print(self.ai_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "2" and mode.select_mode == "2":
+                                            print(self.player_2_win)
+                                            db.insert_lose()
+                                        
+                                        a = input("Do you want to play again? Y/N > ")
+                                        
+                                        if a.lower() == "y":
+                                            board.board_reset_2()
+                                            board.choose_map()
+                                            character.choose_chara_x()   
+                                            board.update_map_x()
+                                            board.choose_map()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                    
+                                    elif play.check_tie():
+                                        print(self.tie)
+                                        db.insert_lose()
+                                        a = input("Do you want to play again? Y/N > ")
+                                        if a.lower() == "y":
+                                            board.board_reset_2()
+                                            board.choose_map()
+                                            character.choose_chara_x()   
+                                            board.update_map_x()
+                                            board.choose_map()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                
+                                elif board.select_board == "3":
+                                    if play.check_winner("X"):
+                                        if character.select_character == "1" and mode.select_mode == "1" or mode.select_mode == "2":
+                                            print(self.player_1_win)
+                                            db.insert_win()
+                                        elif character.select_character == "2" and mode.select_mode == "1":
+                                            print(self.ai_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "2" and mode.select_mode == "2":
+                                            print(self.player_2_win)
+                                            db.insert_lose()
+                                        
+                                        a = input("Do you want to play again? Y/N > ")
+                                        
+                                        if a.lower() == "y":
+                                            board.board_reset_3()
+                                            board.choose_map()
+                                            character.choose_chara_x()   
+                                            board.update_map_x()
+                                            board.choose_map()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                    
+                                    elif play.check_tie():
+                                        print(self.tie)
+                                        db.insert_tie()
+                                        a = input("Do you want to play again? Y/N > ")
+                                        if a.lower() == "y":
+                                            board.board_reset_3()
+                                            board.choose_map()
+                                            character.choose_chara_x()   
+                                            board.update_map_x()
+                                            board.choose_map()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+
+                                character.choose_chara_o()
+
+                                board.update_map_o()
+
+                                if board.select_board == "1":
+                                    if play.check_winner("O"):
+                                        board.choose_map()
+                                        if character.select_character == "1" and mode.select_mode == "1":
+                                            print(self.ai_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "1" and mode.select_mode == "2":
+                                            print(self.player_2_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "2" and mode.select_mode == "1" or mode.select_mode == "2":
+                                            print(self.player_1_win)
+                                            db.insert_win()
+                                        
+                                        a = input("Do you want to play again? Y/N > ")
+                                        
+                                        if a.lower() == "y":
+                                            board.board_reset_1()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                
+                                elif board.select_board == "2":
+                                    if play.check_winner("O"):
+                                        board.choose_map()
+                                        if character.select_character == "1" and mode.select_mode == "1":
+                                            print(self.ai_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "1" and mode.select_mode == "2":
+                                            print(self.player_2_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "2" and mode.select_mode == "1" or mode.select_mode == "2":
+                                            print(self.player_1_win)
+                                            db.insert_win()
+                                        
+                                        a = input("Do you want to play again? Y/N > ")
+                                        
+                                        if a.lower() == "y":
+                                            board.board_reset_2()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                                
+                                elif board.select_board == "3":
+                                    if play.check_winner("O"):
+                                        board.choose_map()
+                                        if character.select_character == "1" and mode.select_mode == "1":
+                                            print(self.ai_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "1" and mode.select_mode == "2":
+                                            print(self.player_2_win)
+                                            db.insert_lose()
+                                        elif character.select_character == "2" and mode.select_mode == "1" or mode.select_mode == "2":
+                                            print(self.player_1_win)
+                                            db.insert_win()
+                                        
+                                        a = input("Do you want to play again? Y/N > ")
+                                        
+                                        if a.lower() == "y":
+                                            board.board_reset_3()
+                                        else:
+                                            print("Game Over")
+                                            ext.exit_game()
+                                            return False
+                        else:
+                            print("Wrong Move")
+                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                return False
+
+            elif select == "2":
+                print(" ")
+                print("----------History----------")
+                db.check_history()    
+                print(" ")
+                        
+            else:
+                ext.exit_game()
+                return False
         
         return False
 
@@ -315,17 +510,18 @@ class Mode(Main_Menu):
         self.mode = ["Vs AI", "Vs Player"]
         self.select_mode = "1"
     
-    def ai(self):
-        print("You choose Mode",self.mode[0])
+    def vs_ai(self):
+        print("You Choose Vs AI Mode")
     
-    def player(self):
-        print("You choose Mode",self.mode[1])
+    def vs_player(self):
+        print("You Choose Vs Player Mode")
 
 # Keluar dari game
 class Exit_Game(Main_Menu):
     def exit_game(self):
         print("----------THANK YOU FOR PLAYING THIS GAME----------")
 
+db = Data_Base()
 menu = Main_Menu()
 play = Play_Game()
 board = Board()
@@ -333,4 +529,6 @@ character = Character()
 mode = Mode()
 ext = Exit_Game()
 
-play.main()
+if __name__ == "__main__":
+    play.main()
+    
