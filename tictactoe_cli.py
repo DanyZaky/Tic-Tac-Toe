@@ -134,6 +134,7 @@ class Play_Game(Main_Menu):
                     main = input("----------Select Menu---------- \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n 5. Back \n > ")
                     clear.clearScreen()
                     while Main_Menu.game_still_going == True:
+                    #select BOARD
                         if main == "1":
                             board.select_board = input("Choose Your Board \n 1. Board 1 ( ) \n 2. Board 2 ( - ) \n 3. Board 3 ( ? ) \n > ")
                             clear.clearScreen()
@@ -150,7 +151,7 @@ class Play_Game(Main_Menu):
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
                             clear.clearScreen()
-                        
+                    #select CHARACTER
                         elif main == "2":
                             character.select_character = input("Choose Your Character \n 1. X \n 2. O \n > ")
                             clear.clearScreen()
@@ -162,7 +163,7 @@ class Play_Game(Main_Menu):
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
                             clear.clearScreen()
-                        
+                    #select MODE
                         elif main == "3":
                             mode.select_mode = input("Choose Mode \n 1. Vs AI \n 2. Vs Player \n > ")
                             clear.clearScreen()
@@ -174,12 +175,14 @@ class Play_Game(Main_Menu):
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
                             clear.clearScreen()
-                        
+                    #G A M E P L A Y
                         elif main == "4":
                             while Main_Menu.game_still_going == True:
                                 board.choose_map()
 
-                                character.choose_chara_x() 
+                                character.choose_chara_x()
+
+                                clear.clearScreen() 
 
                                 board.update_map_x()
 
@@ -376,11 +379,13 @@ class Play_Game(Main_Menu):
                 print("----------History----------")
                 db.check_history()    
                 print(" ")
-                p = input("Press F to clear your history \n > ")
-                if p.lower() == "f":
+                p = input("1. Clear History \n2. Back\n> ")
+                if p == "1":
                     db.clear_database()
+                elif p == "2":
+                    print()
                 else:
-                    print("OK")
+                    print("Masukkan inputan dengan benar")
                         
             else:
                 ext.exit_game()
