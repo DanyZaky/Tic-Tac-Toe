@@ -77,6 +77,12 @@ class Data_Base():
         rows = self.cursor.fetchall()
         for row in rows:
             print(row)
+    
+    def clear_database(self):
+        self.connection = sqlite3.connect("database.db")
+        self.cursor = self.connection.cursor()
+        self.sql = "DROP TABLE data"
+        self.cursor.execute(self.sql)
 
 class Clear_Screen():
     def clearScreen(self):
@@ -110,36 +116,36 @@ class Play_Game(Main_Menu):
         self.player_1_win = "Player 1 WIN!!!"
         self.player_2_win = "Player 2 WIN!!!"
         self.ai_win = "AI WIN!!!"
-        self.tie = "There is no winner!!!"
+        self.tie = "There is no winner"
         self.win = "You Win"
         self.lose = "You Lose"
 
     def main(self):
-        clear.clearScreen()
-        db.create_database()
-        menu.welcome()
         while True:
+            clear.clearScreen()
+            db.create_database()
+            menu.welcome()
             select = input("----------Main Menu---------- \n 1. Play Game \n 2. History \n 3. Exit Game \n > ")
             clear.clearScreen()
             if select == "1":
                 menu.login()
                 clear.clearScreen()
-                while True:
-                    main = input("----------Select Menu---------- \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
+                while Main_Menu.game_still_going == True:
+                    main = input("----------Select Menu---------- \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n 5. Back \n > ")
                     clear.clearScreen()
-                    while main:
+                    while Main_Menu.game_still_going == True:
                         if main == "1":
                             board.select_board = input("Choose Your Board \n 1. Board 1 ( ) \n 2. Board 2 ( - ) \n 3. Board 3 ( ? ) \n > ")
                             clear.clearScreen()
 
                             if board.select_board == "1":
-                                print("You Choose")
+                                print("-----You Choose")
                                 board.display1()
                             elif board.select_board == "2":
-                                print("You Choose")
+                                print("-----You Choose")
                                 board.display2()
                             elif board.select_board == "3":
-                                print("You Choose")
+                                print("-----You Choose")
                                 board.display3()
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
@@ -150,9 +156,9 @@ class Play_Game(Main_Menu):
                             clear.clearScreen()
                             
                             if character.select_character == "1":
-                                print("You are X")
+                                print("-----You are X")
                             elif character.select_character == "2":
-                                print("You are O")
+                                print("-----You are O")
 
                             main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
                             clear.clearScreen()
@@ -201,8 +207,7 @@ class Play_Game(Main_Menu):
                                             board.choose_map()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                     
                                     elif play.check_tie():
                                         print(self.tie)
@@ -216,8 +221,7 @@ class Play_Game(Main_Menu):
                                             board.choose_map()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                 
                                 elif board.select_board == "2":
                                     if play.check_winner("X"):
@@ -241,8 +245,7 @@ class Play_Game(Main_Menu):
                                             board.choose_map()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                     
                                     elif play.check_tie():
                                         print(self.tie)
@@ -256,8 +259,7 @@ class Play_Game(Main_Menu):
                                             board.choose_map()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                 
                                 elif board.select_board == "3":
                                     if play.check_winner("X"):
@@ -281,8 +283,7 @@ class Play_Game(Main_Menu):
                                             board.choose_map()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                     
                                     elif play.check_tie():
                                         print(self.tie)
@@ -296,12 +297,13 @@ class Play_Game(Main_Menu):
                                             board.choose_map()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
 
-                                character.choose_chara_o()
+                                if Main_Menu.game_still_going == True:
+                                    character.choose_chara_o()
 
-                                board.update_map_o()
+                                if Main_Menu.game_still_going == True:
+                                    board.update_map_o()
 
                                 if board.select_board == "1":
                                     if play.check_winner("O"):
@@ -322,8 +324,7 @@ class Play_Game(Main_Menu):
                                             board.board_reset_1()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                 
                                 elif board.select_board == "2":
                                     if play.check_winner("O"):
@@ -344,8 +345,7 @@ class Play_Game(Main_Menu):
                                             board.board_reset_2()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
                                 
                                 elif board.select_board == "3":
                                     if play.check_winner("O"):
@@ -366,18 +366,21 @@ class Play_Game(Main_Menu):
                                             board.board_reset_3()
                                         else:
                                             print("Game Over")
-                                            ext.exit_game()
-                                            return False
+                                            Main_Menu.game_still_going = False
+                        
                         else:
-                            print("Wrong Move")
-                            main = input("Select Menu \n 1. Select Board \n 2. Select Character \n 3. Select Mode \n 4. Start Game \n > ")
-                return False
+                            Main_Menu.game_still_going = False
 
             elif select == "2":
                 print(" ")
                 print("----------History----------")
                 db.check_history()    
                 print(" ")
+                p = input("Press F to clear your history \n > ")
+                if p.lower() == "f":
+                    db.clear_database()
+                else:
+                    print("OK")
                         
             else:
                 ext.exit_game()
@@ -526,10 +529,10 @@ class Mode(Main_Menu):
         self.select_mode = "1"
     
     def vs_ai(self):
-        print("You Choose Vs AI Mode")
+        print("-----You Choose Vs AI Mode")
     
     def vs_player(self):
-        print("You Choose Vs Player Mode")
+        print("-----You Choose Vs Player Mode")
 
 # Keluar dari game
 class Exit_Game(Main_Menu):
